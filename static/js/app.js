@@ -506,14 +506,35 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
+    // ? or Shift + / to show shortcuts
+    if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        showShortcuts();
+    }
+    
+    // Escape to close modals
+    if (e.key === 'Escape') {
+        hideShortcuts();
+    }
+    
     // Ctrl/Cmd + Enter to convert
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
         convertContent();
     }
     
-    // Escape to close modals (if any)
-    if (e.key === 'Escape') {
-        // Close any open modals
+    // Ctrl/Cmd + A to select all platforms
+    if ((e.ctrlKey || e.metaKey) && e.key === 'a' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        selectAllPlatforms();
+        showToast('Všetky platformy vybraté', 'success');
+    }
+    
+    // Ctrl/Cmd + D to deselect all
+    if ((e.ctrlKey || e.metaKey) && e.key === 'd' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        deselectAllPlatforms();
+        showToast('Výber zrušený', 'info');
     }
 });
 
@@ -527,6 +548,32 @@ function trackEvent(eventName, data = {}) {
 trackEvent('page_load', {
     url: window.location.href,
     timestamp: new Date().toISOString()
+});
+
+// ============ KEYBOARD SHORTCUTS MODAL ============
+
+function showShortcuts() {
+    const modal = document.getElementById('shortcutsModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+function hideShortcuts() {
+    const modal = document.getElementById('shortcutsModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+// Close modal on backdrop click
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('shortcutsModal');
+    if (e.target === modal) {
+        hideShortcuts();
+    }
 });
 
 // Intersection Observer for animations
