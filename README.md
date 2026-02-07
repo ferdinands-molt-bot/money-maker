@@ -6,7 +6,7 @@
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
 [![GitHub stars](https://img.shields.io/github/stars/ferdinands-molt-bot/money-maker.svg?style=social)](https://github.com/ferdinands-molt-bot/money-maker/stargazers)
 
-**Turn one blog post into 6 platform-optimized social media posts in 30 seconds.**
+**Turn one blog post into 10 platform-optimized social media posts in 30 seconds.**
 
 [🚀 Live Demo](http://localhost:8080) • [📖 Documentation](API.md) • [💰 Monetization](MONETIZATION.md) • [🗺️ Roadmap](ROADMAP.md)
 
@@ -28,7 +28,7 @@ Creating content for multiple platforms takes **3+ hours per blog post**:
 It's exhausting, inconsistent, and unsustainable.
 
 ### Our Solution
-**One input → 6 optimized outputs in 30 seconds**
+**One input → 10 optimized outputs in 30 seconds**
 
 Paste your blog post once. Get platform-specific content instantly:
 
@@ -40,6 +40,10 @@ Paste your blog post once. Get platform-specific content instantly:
 | 📘 **Facebook** | Community-focused posts |
 | 🎥 **YouTube** | SEO-optimized descriptions |
 | 📧 **Newsletter** | Email excerpts with subject lines |
+| 🎵 **TikTok** | Viral scripts with trending hooks |
+| 📌 **Pinterest** | SEO-optimized pin descriptions |
+| 🧵 **Threads** | Conversational thread posts |
+| 🤖 **Reddit** | Community discussion posts |
 
 ---
 
@@ -51,6 +55,10 @@ Paste your blog post once. Get platform-specific content instantly:
 - 🔄 **Unlimited conversions** - Pro plan has no limits
 - 💾 **Conversion history** - Access your past conversions
 - 🔌 **API access** - Integrate with your workflow (Business plan)
+- 📈 **Word count & reading time** - Track content metrics
+- 💾 **Export & download** - Save results as JSON or text
+- ⌨️ **Keyboard shortcuts** - Quick actions with hotkeys
+- 📱 **10 platforms** - Twitter, LinkedIn, Instagram, Facebook, YouTube, Newsletter, TikTok, Pinterest, Threads, Reddit
 
 ---
 
@@ -94,7 +102,7 @@ python server.py
 | Plan | Price | Features |
 |------|-------|----------|
 | **Free** | $0 | 3 conversions/month, 2 platforms |
-| **Pro** | $9/mo | Unlimited, all 6 platforms, all tones |
+| **Pro** | $9/mo | Unlimited, all 10 platforms, all tones |
 | **Business** | $29/mo | Everything + API + 5 team members |
 
 [Start free →](http://localhost:8080)
