@@ -372,9 +372,16 @@ Edit: Thanks for all the engagement! This blew up more than expected."""
     
     def generate_demo_results(self, content):
         return {
-            'twitter': self.generate_twitter(content),
-            'linkedin': self.generate_linkedin(content),
-            'instagram': self.generate_instagram(content)
+            'twitter': self.generate_twitter(content, 'professional'),
+            'linkedin': self.generate_linkedin(content, 'professional'),
+            'instagram': self.generate_instagram(content, 'professional'),
+            'facebook': self.generate_facebook(content, 'professional'),
+            'youtube': self.generate_youtube(content, 'professional'),
+            'tiktok': self.generate_tiktok(content, 'casual'),
+            'pinterest': self.generate_pinterest(content, 'professional'),
+            'threads': self.generate_threads(content, 'casual'),
+            'reddit': self.generate_reddit(content, 'professional'),
+            'newsletter': self.generate_newsletter(content, 'professional')
         }
 
 if __name__ == '__main__':
