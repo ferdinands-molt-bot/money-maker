@@ -53,6 +53,17 @@ function updateWordCount() {
     const counter = document.getElementById('wordCount');
     
     counter.textContent = `${words} slov`;
+    
+    // Update reading time
+    updateReadingTime(words);
+}
+
+function updateReadingTime(words) {
+    const readingTimeEl = document.getElementById('readingTime');
+    if (readingTimeEl) {
+        const minutes = Math.max(1, Math.ceil(words / 200)); // 200 words per minute
+        readingTimeEl.innerHTML = `<i class="far fa-clock mr-1"></i>${minutes} min čítania`;
+    }
 }
 
 function updateCounters() {
