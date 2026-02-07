@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentMultiplier - AI Content Multiplier | Zarobte viac s menej úsilím</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-['Inter'] bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-rocket text-indigo-600 text-2xl mr-2"></i>
+                        <span class="font-bold text-xl text-gray-900">ContentMultiplier</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#features" class="text-gray-600 hover:text-gray-900">Funkcie</a>
+                    <a href="#pricing" class="text-gray-600 hover:text-gray-900">Ceny</a>
+                    <button onclick="scrollToConverter()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                        Vyskúšať zadarmo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center">
+                <div class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-1 mb-6">
+                    <span class="text-sm font-medium">🚀 Nový spôsob zarábania peňazí v 2026</span>
+                </div>
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                    Jedno prepísanie.<br>
+                    <span class="text-yellow-300">6 platforiem.</span><br>
+                    10x väčší dosah.
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto">
+                    ContentMultiplier využíva AI na premenu vášho obsahu do viacerých formátov. 
+                    Šetrite čas, zvýšte engagement a zarobte viac.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="scrollToConverter()" class="bg-white text-indigo-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-lg">
+                        <i class="fas fa-magic mr-2"></i>Vytvoriť obsah zadarmo
+                    </button>
+                    <button onclick="showDemo()" class="bg-indigo-500/50 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-indigo-500/70 transition border border-white/30">
+                        <i class="fas fa-play mr-2"></i>Pozrieť demo
+                    </button>
+                </div>
+                <p class="mt-4 text-sm text-indigo-200">Žiadna kreditná karta potrebná • Zrušiť kedykoľvek</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="bg-white border-b border-gray-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-3xl font-bold text-indigo-600">10,000+</div>
+                    <div class="text-gray-600">Vytvorených postov</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-indigo-600">5 hodín</div>
+                    <div class="text-gray-600">Ušetrené týždenne</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-indigo-600">300%</div>
+                    <div class="text-gray-600">Nárast engagementu</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-indigo-600">4.9/5</div>
+                    <div class="text-gray-600">Hodnotenie užívateľov</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Converter Section -->
+    <div id="converter" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Vytvorte viac obsahu za menej času</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Vložte svoj blog post, článok alebo myšlienku a my vygenerujeme optimalizovaný obsah pre všetky sociálne siete.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Input Section -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            <i class="fas fa-pen-fancy text-indigo-600 mr-2"></i>Váš obsah
+                        </h3>
+                        <span id="charCount" class="text-sm text-gray-500">0 znakov</span>
+                    </div>
+                    <textarea 
+                        id="contentInput" 
+                        rows="12" 
+                        class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                        placeholder="Vložte váš blog post, článok alebo myšlienku sem...
+
+Príklad: Artificial Intelligence is transforming how we create content. By using AI tools, businesses can repurpose their existing content into multiple formats..."
+                    ></textarea>
+                    
+                    <!-- Platform Selection -->
+                    <div class="mt-6">
+                        <h4 class="text-sm font-semibold text-gray-700 mb-3">Vyberte platformy:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="togglePlatform('twitter')" id="btn-twitter" class="platform-btn active px-4 py-2 rounded-full border-2 border-indigo-600 bg-indigo-600 text-white text-sm font-medium transition">
+                                <i class="fab fa-twitter mr-1"></i> Twitter/X
+                            </button>
+                            <button onclick="togglePlatform('linkedin')" id="btn-linkedin" class="platform-btn active px-4 py-2 rounded-full border-2 border-indigo-600 bg-indigo-600 text-white text-sm font-medium transition">
+                                <i class="fab fa-linkedin mr-1"></i> LinkedIn
+                            </button>
+                            <button onclick="togglePlatform('instagram')" id="btn-instagram" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
+                                <i class="fab fa-instagram mr-1"></i> Instagram
+                            </button>
+                            <button onclick="togglePlatform('facebook')" id="btn-facebook" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
+                                <i class="fab fa-facebook mr-1"></i> Facebook
+                            </button>
+                            <button onclick="togglePlatform('youtube')" id="btn-youtube" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
+                                <i class="fab fa-youtube mr-1"></i> YouTube
+                            </button>
+                            <button onclick="togglePlatform('newsletter')" id="btn-newsletter" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
+                                <i class="fas fa-envelope mr-1"></i> Newsletter
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tone Selection -->
+                    <div class="mt-4">
+                        <h4 class="text-sm font-semibold text-gray-700 mb-3">Tón:</h4>
+                        <select id="toneSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                            <option value="professional">Profesionálny</option>
+                            <option value="casual">Neformálny</option>
+                            <option value="enthusiastic">Nadšený</option>
+                            <option value="educational">Edukačný</option>
+                            <option value="witty">Vtipný</option>
+                        </select>
+                    </div>
+
+                    <button onclick="convertContent()" id="convertBtn" class="w-full mt-6 bg-indigo-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-indigo-700 transition flex items-center justify-center">
+                        <i class="fas fa-magic mr-2"></i>
+                        <span>Generovať obsah</span>
+                    </button>
+                </div>
+
+                <!-- Output Section -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            <i class="fas fa-bolt text-yellow-500 mr-2"></i>Výsledky
+                        </h3>
+                        <div id="loadingIndicator" class="hidden">
+                            <i class="fas fa-spinner fa-spin text-indigo-600"></i>
+                            <span class="ml-2 text-sm text-gray-600">Generujem...</span>
+                        </div>
+                    </div>
+
+                    <div id="resultsContainer" class="space-y-4 max-h-[500px] overflow-y-auto">
+                        <!-- Default state -->
+                        <div id="emptyState" class="text-center py-12 text-gray-400">
+                            <i class="fas fa-rocket text-6xl mb-4 opacity-30"></i>
+                            <p>Výsledky sa zobrazia tu</p>
+                            <p class="text-sm mt-2">Vložte obsah a kliknite "Generovať"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div id="features" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Ako to funguje</h2>
+                <p class="text-gray-600">Tri jednoduché kroky k viac obsahu</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-indigo-600">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Vložte obsah</h3>
+                    <p class="text-gray-600">Vložte váš blog post, článok alebo myšlienku. AI analyzuje kontext a kľúčové body.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-indigo-600">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Vyberte platformy</h3>
+                    <p class="text-gray-600">Zvoľte, pre ktoré sociálne siete chcete obsah generovať. Podporujeme 6 platforiem.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-indigo-600">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Kopírujte a publikujte</h3>
+                    <p class="text-gray-600">Získate optimalizovaný obsah pre každú platformu. Skopírujte a publikujte okamžite.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <div id="pricing" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Jednoduché ceny</h2>
+                <p class="text-gray-600">Začnite zadarmo, upgradujte keď rastiete</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Free Plan -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-2">Free</h3>
+                    <p class="text-gray-600 mb-4">Pre skúšanie</p>
+                    <div class="text-4xl font-bold mb-6">$0<span class="text-lg font-normal text-gray-600">/mesiac</span></div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>3 konverzie mesačne</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Twitter & LinkedIn</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Základné formáty</li>
+                    </ul>
+                    <button onclick="scrollToConverter()" class="w-full py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg font-semibold hover:bg-indigo-50 transition">
+                        Začať zadarmo
+                    </button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="bg-white rounded-2xl shadow-xl p-8 border-2 border-indigo-600 relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-indigo-600 text-white px-4 py-1 rounded-full text-sm font-semibold">Najpopulárnejší</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Pro</h3>
+                    <p class="text-gray-600 mb-4">Pre content creatorov</p>
+                    <div class="text-4xl font-bold mb-6">$9<span class="text-lg font-normal text-gray-600">/mesiac</span></div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Neobmedzené konverzie</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Všetky 6 platforiem</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Všetky tóny</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>História konverzií</li>
+                    </ul>
+                    <button class="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
+                        Zvoliť Pro
+                    </button>
+                </div>
+
+                <!-- Business Plan -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-2">Business</h3>
+                    <p class="text-gray-600 mb-4">Pre tímy a agentúry</p>
+                    <div class="text-4xl font-bold mb-6">$29<span class="text-lg font-normal text-gray-600">/mesiac</span></div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Všetko z Pro</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>5 tímových členov</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>API prístup</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Priority support</li>
+                    </ul>
+                    <button class="w-full py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg font-semibold hover:bg-indigo-50 transition">
+                        Kontaktovať predaj
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-indigo-600 text-white py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-4">Pripravení znásobiť svoj obsah?</h2>
+            <p class="text-xl text-indigo-200 mb-8">Pripojte sa k tisícom content creatorov, ktorí šetria čas a zvyšujú engagement.</p>
+            <button onclick="scrollToConverter()" class="bg-white text-indigo-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-lg">
+                Vytvoriť prvý obsah zadarmo
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-rocket text-indigo-500 text-xl mr-2"></i>
+                        <span class="font-bold text-white text-lg">ContentMultiplier</span>
+                    </div>
+                    <p class="text-sm">AI-powered content repurposing pre moderných creatorov.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Produkt</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#features" class="hover:text-white">Funkcie</a></li>
+                        <li><a href="#pricing" class="hover:text-white">Ceny</a></li>
+                        <li><a href="#" class="hover:text-white">API</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Podpora</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Dokumentácia</a></li>
+                        <li><a href="#" class="hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Sledujte nás</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2026 ContentMultiplier. Všetky práva vyhradené.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
