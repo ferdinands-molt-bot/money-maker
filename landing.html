@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentMultiplier - Turn One Post Into Six | AI Content Tool</title>
+    <meta name="description" content="AI-powered content repurposing tool. Turn one blog post into Twitter threads, LinkedIn posts, Instagram captions, and more. Save 5+ hours weekly.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Announcement Bar -->
+    <div class="bg-indigo-600 text-white text-center py-2 text-sm">
+        🚀 Just launched on Product Hunt! <a href="#" class="underline font-semibold">Check it out →</a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <i class="fas fa-rocket text-indigo-600 text-2xl mr-2"></i>
+                    <span class="font-bold text-xl">ContentMultiplier</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-600 hover:text-gray-900">Features</a>
+                    <a href="#how-it-works" class="text-gray-600 hover:text-gray-900">How It Works</a>
+                    <a href="#pricing" class="text-gray-600 hover:text-gray-900">Pricing</a>
+                    <a href="../templates/index.html" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Try Free</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+            <div class="text-center">
+                <div class="inline-flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-8">
+                    <span class="flex h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                    <span class="text-white/90 text-sm font-medium">New: Instagram & YouTube support added</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+                    Turn One Post Into
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">Six Platforms</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-indigo-100 max-w-3xl mx-auto mb-10">
+                    AI-powered content repurposing that transforms your blog posts into 
+                    platform-optimized social media content in seconds.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                    <a href="../templates/index.html" class="bg-white text-indigo-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-lg flex items-center justify-center">
+                        <i class="fas fa-magic mr-2"></i>
+                        Start Creating Free
+                    </a>
+                    <button onclick="document.getElementById('demo-video').scrollIntoView({behavior:'smooth'})" class="glass text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/20 transition flex items-center justify-center">
+                        <i class="fas fa-play-circle mr-2"></i>
+                        Watch Demo
+                    </button>
+                </div>
+                
+                <!-- Social Proof -->
+                <div class="flex flex-wrap justify-center items-center gap-8 text-white/80">
+                    <div class="flex items-center">
+                        <div class="flex -space-x-2 mr-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-indigo-600"></div>
+                            <div class="w-8 h-8 rounded-full bg-gray-400 border-2 border-indigo-600"></div>
+                            <div class="w-8 h-8 rounded-full bg-gray-500 border-2 border-indigo-600"></div>
+                        </div>
+                        <span class="text-sm">Join 2,000+ creators</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-sm">4.9/5 rating</span>
+                    </div>
+                    <div class="text-sm">
+                        <i class="fas fa-shield-alt mr-1"></i>
+                        No credit card required
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logos Section -->
+    <div class="bg-white border-b border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-gray-500 text-sm mb-8 uppercase tracking-wide font-semibold">Trusted by content creators from</p>
+            <div class="flex flex-wrap justify-center items-center gap-12 opacity-50">
+                <div class="text-2xl font-bold text-gray-400">Shopify</div>
+                <div class="text-2xl font-bold text-gray-400">Notion</div>
+                <div class="text-2xl font-bold text-gray-400">Figma</div>
+                <div class="text-2xl font-bold text-gray-400">Stripe</div>
+                <div class="text-2xl font-bold text-gray-400">Vercel</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem/Solution Section -->
+    <div id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="text-indigo-600 font-semibold uppercase tracking-wide text-sm">The Problem</span>
+                    <h2 class="text-4xl font-bold text-gray-900 mt-2 mb-6">Creating content for multiple platforms takes forever</h2>
+                    <p class="text-gray-600 text-lg mb-8">
+                        You write an amazing blog post. Then you spend 3+ hours rewriting it for Twitter, LinkedIn, Instagram, 
+                        Facebook, YouTube, and your newsletter. It's exhausting and unsustainable.
+                    </p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span class="text-gray-600">Hours spent on manual rewriting</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span class="text-gray-600">Inconsistent messaging across platforms</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span class="text-gray-600">Missed opportunities due to lack of time</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span class="text-gray-600">Creator burnout from overwork</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-8">
+                    <span class="text-indigo-600 font-semibold uppercase tracking-wide text-sm">Our Solution</span>
+                    <h2 class="text-4xl font-bold text-gray-900 mt-2 mb-6">One input. Six outputs. 30 seconds.</h2>
+                    <p class="text-gray-600 text-lg mb-8">
+                        ContentMultiplier uses AI to understand your content and generate platform-optimized versions 
+                        that follow best practices for each social network.
+                    </p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-600">Save 5+ hours every week</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-600">Consistent brand voice everywhere</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-600">10x your content reach</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-600">Focus on creating, not formatting</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Platforms Grid -->
+    <div class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Supported Platforms</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Generate optimized content for all major social media platforms</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fab fa-twitter text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Twitter/X</h3>
+                    <p class="text-gray-600 text-sm">Engaging threads with hooks, CTAs, and optimal formatting for maximum engagement.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fab fa-linkedin text-2xl text-blue-700"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">LinkedIn</h3>
+                    <p class="text-gray-600 text-sm">Professional posts with takeaways, questions, and optimized for B2B engagement.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+                    <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fab fa-instagram text-2xl text-pink-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Instagram</h3>
+                    <p class="text-gray-600 text-sm">Captions with strategic hashtags, emojis, and calls-to-action that drive saves.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fab fa-facebook text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Facebook</h3>
+                    <p class="text-gray-600 text-sm">Community-focused posts designed to spark conversations and sharing.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fab fa-youtube text-2xl text-red-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">YouTube</h3>
+                    <p class="text-gray-600 text-sm">SEO-optimized descriptions with timestamps, links, and discoverability features.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-envelope text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Newsletter</h3>
+                    <p class="text-gray-600 text-sm">Email excerpts with subject lines, preview text, and conversion-optimized copy.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Video Section -->
+    <div id="demo-video" class="py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">See It In Action</h2>
+                <p class="text-gray-600">Watch how ContentMultiplier transforms a blog post in 30 seconds</p>
+            </div>
+            
+            <div class="relative aspect-video bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <button class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition">
+                        <i class="fas fa-play text-indigo-600 text-2xl ml-1"></i>
+                    </button>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                    <p class="text-white font-medium">Product Demo (2:34)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Loved by Creators</h2>
+                <p class="text-gray-600">See what our users are saying</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <div class="flex text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4">"This tool literally saved my business. I was spending 10+ hours weekly on content repurposing. Now it's 30 minutes."</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="font-semibold text-indigo-600">S</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Sarah Chen</p>
+                            <p class="text-sm text-gray-500">Marketing Consultant</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <div class="flex text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4">"The LinkedIn posts it generates are incredible. My engagement went up 300% in the first week of using it."</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="font-semibold text-purple-600">M</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Marcus Johnson</p>
+                            <p class="text-sm text-gray-500">Startup Founder</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <div class="flex text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4">"We use this for all our agency clients. It's like having an extra team member for $9/month."</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="font-semibold text-pink-600">E</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Emma Rodriguez</p>
+                            <p class="text-sm text-gray-500">Agency Owner</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <div id="pricing" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Simple Pricing</h2>
+                <p class="text-gray-600">Start free, upgrade when you're ready</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Free -->
+                <div class="border border-gray-200 rounded-2xl p-8">
+                    <h3 class="text-xl font-semibold mb-2">Free</h3>
+                    <p class="text-gray-500 mb-6">Get started</p>
+                    <div class="text-4xl font-bold mb-6">$0<span class="text-lg font-normal text-gray-500">/mo</span></div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>3 conversions/month</li>
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>Twitter & LinkedIn</li>
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>Basic formats</li>
+                    </ul>
+                    <a href="../templates/index.html" class="block w-full text-center py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg font-semibold hover:bg-indigo-50 transition">Get Started</a>
+                </div>
+                
+                <!-- Pro -->
+                <div class="border-2 border-indigo-600 rounded-2xl p-8 relative bg-indigo-50/30">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-indigo-600 text-white px-4 py-1 rounded-full text-sm font-semibold">Most Popular</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Pro</h3>
+                    <p class="text-gray-500 mb-6">For serious creators</p>
+                    <div class="text-4xl font-bold mb-6">$9<span class="text-lg font-normal text-gray-500">/mo</span></div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>Unlimited conversions</li>
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>All 6 platforms</li>
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>All tones & styles</li>
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>Conversion history</li>
+                    </ul>
+                    <a href="../templates/index.html" class="block w-full text-center py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">Start Pro Trial</a>
+                </div>
+                
+                <!-- Business -->
+                <div class="border border-gray-200 rounded-2xl p-8">
+                    <h3 class="text-xl font-semibold mb-2">Business</h3>
+                    <p class="text-gray-500 mb-6">For teams</p>
+                    <div class="text-4xl font-bold mb-6">$29<span class="text-lg font-normal text-gray-500">/mo</span></div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>Everything in Pro</li>
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>5 team members</li>
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>API access</li>
+                        <li class="flex items-center text-sm"><i class="fas fa-check text-green-500 mr-2"></i>Priority support</li>
+                    </ul>
+                    <a href="../templates/index.html" class="block w-full text-center py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg font-semibold hover:bg-indigo-50 transition">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="py-20 bg-gray-50">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <details class="bg-white rounded-lg p-6 shadow-sm">
+                    <summary class="font-semibold cursor-pointer">How does the AI generate content?</summary>
+                    <p class="text-gray-600 mt-3">We use advanced language models (GPT-4) trained on high-performing content from each platform. The AI analyzes your input, extracts key points, and restructures them following platform-specific best practices.</p>
+                </details>
+                
+                <details class="bg-white rounded-lg p-6 shadow-sm">
+                    <summary class="font-semibold cursor-pointer">Is the generated content original?</summary>
+                    <p class="text-gray-600 mt-3">Yes! The AI creates unique content based on your input. It doesn't copy from existing sources. You own all generated content and can use it commercially.</p>
+                </details>
+                
+                <details class="bg-white rounded-lg p-6 shadow-sm">
+                    <summary class="font-semibold cursor-pointer">Can I edit the generated content?</summary>
+                    <p class="text-gray-600 mt-3">Absolutely! The AI gives you a strong starting point, but we always recommend reviewing and tweaking the content to match your personal voice.</p>
+                </details>
+                
+                <details class="bg-white rounded-lg p-6 shadow-sm">
+                    <summary class="font-semibold cursor-pointer">What languages are supported?</summary>
+                    <p class="text-gray-600 mt-3">Currently English and Slovak. We're working on adding more languages soon.</p>
+                </details>
+                
+                <details class="bg-white rounded-lg p-6 shadow-sm">
+                    <summary class="font-semibold cursor-pointer">Can I cancel anytime?</summary>
+                    <p class="text-gray-600 mt-3">Yes! There are no contracts. You can cancel your subscription at any time and you'll keep access until the end of your billing period.</p>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="py-20 bg-indigo-600">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to 10x Your Content Output?</h2>
+            <p class="text-xl text-indigo-200 mb-8">Join 2,000+ creators who are saving hours every week with ContentMultiplier.</p>
+            <a href="../templates/index.html" class="inline-block bg-white text-indigo-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-lg">
+                <i class="fas fa-magic mr-2"></i>
+                Start Creating Free
+            </a>
+            <p class="text-indigo-300 mt-4 text-sm">No credit card required • Cancel anytime</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-rocket text-indigo-500 text-xl mr-2"></i>
+                        <span class="font-bold text-white text-lg">ContentMultiplier</span>
+                    </div>
+                    <p class="text-sm">AI-powered content repurposing for modern creators.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#features" class="hover:text-white">Features</a></li>
+                        <li><a href="#pricing" class="hover:text-white">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white">API</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="hover:text-white"><i class="fab fa-linkedin text-xl"></i></a>
+                        <a href="#" class="hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm">
+                <p>&copy; 2026 ContentMultiplier. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
