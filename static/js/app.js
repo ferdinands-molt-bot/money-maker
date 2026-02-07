@@ -4,6 +4,7 @@
 let selectedPlatforms = ['twitter', 'linkedin'];
 let isConverting = false;
 let currentResults = null;
+let conversionHistory = [];
 
 // All available platforms
 const ALL_PLATFORMS = ['twitter', 'linkedin', 'instagram', 'facebook', 'youtube', 'newsletter', 'tiktok', 'pinterest', 'threads', 'reddit'];
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     loadDemoData();
     updateCounters();
+    loadHistory();
 });
 
 // Event Listeners
@@ -150,6 +152,10 @@ async function convertContent() {
             currentResults = data.results;
             displayResults(data.results);
             showDownloadButton(true);
+            
+            // Save to history
+            saveToHistory(content, data.results, selectedPlatforms, data.tone);
+            
             showToast('Obsah úspešne vygenerovaný!', 'success');
             trackEvent('content_converted', {
                 platforms: selectedPlatforms.length,
@@ -188,11 +194,18 @@ function showLoading(show) {
 
 // Show/hide download button
 function showDownloadButton(show) {
-    const btn = document.getElementById('downloadBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    
     if (show) {
-        btn.classList.remove('hidden');
+        downloadBtn.classList.remove('hidden');
+        clearBtn.classList.remove('hidden');
+        exportBtn.classList.remove('hidden');
     } else {
-        btn.classList.add('hidden');
+        downloadBtn.classList.add('hidden');
+        clearBtn.classList.add('hidden');
+        exportBtn.classList.add('hidden');
     }
 }
 
@@ -534,3 +547,114 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 });
+
+// ============ HISTORY FEATURE ============
+
+// Save conversion to history
+function saveToHistory(content, results, platforms, tone) {
+    const historyItem = {
+        id: Date.now(),
+        content: content.substring(0, 200) + (content.length > 200 ? '...' : ''),
+        fullContent: content,
+        results: results,
+        platforms: platforms,
+        tone: tone,
+        timestamp: new Date().toISOString(),
+        platformCount: Object.keys(results).length
+    };
+    
+    // Add to beginning of array
+    conversionHistory.unshift(historyItem);
+    
+    // Keep only last 20 items
+    if (conversionHistory.length > 20) {
+        conversionHistory = conversionHistory.slice(0, 20);
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('contentMultiplier_history', JSON.stringify(conversionHistory));
+}
+
+// Load history from localStorage
+function loadHistory() {
+    const saved = localStorage.getItem('contentMultiplier_history');
+    if (saved) {
+        try {
+            conversionHistory = JSON.parse(saved);
+        } catch (e) {
+            console.error('Error loading history:', e);
+            conversionHistory = [];
+        }
+    }
+}
+
+// Clear all results
+function clearResults() {
+    const container = document.getElementById('resultsContainer');
+    container.innerHTML = `
+        <div id="emptyState" class="text-center py-12 text-gray-400">
+            <i class="fas fa-rocket text-6xl mb-4 opacity-30"></i>
+            <p>Výsledky sa zobrazia tu</p>
+            <p class="text-sm mt-2">Vložte obsah a kliknite "Generovať"</p>
+        </div>
+    `;
+    currentResults = null;
+    showDownloadButton(false);
+    showToast('Výsledky vymazané', 'info');
+}
+
+// Export results as JSON
+function exportAsJSON() {
+    if (!currentResults) {
+        showToast('Nie sú žiadne výsledky na export', 'warning');
+        return;
+    }
+    
+    const exportData = {
+        exportDate: new Date().toISOString(),
+        originalContent: document.getElementById('contentInput').value,
+        results: currentResults,
+        platforms: selectedPlatforms,
+        tone: document.getElementById('toneSelect').value
+    };
+    
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `content-multiplier-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showToast('Exportované ako JSON!', 'success');
+}
+
+// Calculate reading time
+function calculateReadingTime(text) {
+    const words = text.trim().split(/\s+/).length;
+    const minutes = Math.ceil(words / 200); // Average reading speed
+    return minutes;
+}
+
+// Check Twitter character limit
+function checkTwitterLimit(text) {
+    // Twitter has 280 char limit per tweet
+    const limit = 280;
+    const length = text.length;
+    
+    if (length > limit) {
+        return {
+            valid: false,
+            overBy: length - limit,
+            message: `Prekročený limit o ${length - limit} znakov`
+        };
+    }
+    
+    return {
+        valid: true,
+        remaining: limit - length,
+        message: `Zostáva ${limit - length} znakov`
+    };
+}
