@@ -481,6 +481,50 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
+// Share results on social media
+function shareResults(platform) {
+    if (!currentResults) {
+        showToast('Nie sú žiadne výsledky na zdieľanie', 'warning');
+        return;
+    }
+    
+    const text = 'Práve som vytvoril obsah pre 10 sociálnych sietí pomocou ContentMultiplier! 🚀';
+    const url = window.location.href;
+    
+    const shareUrls = {
+        twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+        email: `mailto:?subject=ContentMultiplier&body=${encodeURIComponent(text + '\n\n' + url)}`
+    };
+    
+    if (shareUrls[platform]) {
+        window.open(shareUrls[platform], '_blank', 'width=600,height=400');
+        trackEvent('share', { platform });
+    }
+}
+
+// Show error with details
+function showError(message, details = '') {
+    console.error('[ContentMultiplier Error]', message, details);
+    showToast(message, 'error');
+}
+
+// Handle API errors
+function handleApiError(error) {
+    console.error('API Error:', error);
+    
+    let message = 'Nastala chyba pri komunikácii so serverom';
+    
+    if (error.message && error.message.includes('Failed to fetch')) {
+        message = 'Server nie je dostupný. Skúste to neskôr.';
+    } else if (error.message && error.message.includes('timeout')) {
+        message = 'Požiadavka trvala príliš dlho. Skúste to znova.';
+    }
+    
+    showError(message, error.message);
+}
+
 // Escape HTML
 function escapeHtml(text) {
     const div = document.createElement('div');
