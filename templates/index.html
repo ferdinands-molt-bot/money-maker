@@ -221,6 +221,13 @@
                     </div>
 
                     <div id="resultsContainer" class="space-y-4 max-h-[500px] overflow-y-auto">
+                        <!-- Loading skeleton (hidden by default) -->
+                        <div id="loadingSkeleton" class="hidden space-y-4">
+                            <div class="animate-pulse bg-gray-200 h-32 rounded-xl"></div>
+                            <div class="animate-pulse bg-gray-200 h-32 rounded-xl"></div>
+                            <div class="animate-pulse bg-gray-200 h-32 rounded-xl"></div>
+                        </div>
+                        
                         <!-- Default state -->
                         <div id="emptyState" class="text-center py-12 text-gray-400">
                             <i class="fas fa-rocket text-6xl mb-4 opacity-30"></i>

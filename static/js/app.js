@@ -218,11 +218,15 @@ async function convertContent() {
 // Show/hide loading
 function showLoading(show) {
     const indicator = document.getElementById('loadingIndicator');
+    const skeleton = document.getElementById('loadingSkeleton');
+    const emptyState = document.getElementById('emptyState');
     const btn = document.getElementById('convertBtn');
     const progressBar = document.getElementById('progressBarFill');
 
     if (show) {
         indicator.classList.remove('hidden');
+        if (skeleton) skeleton.classList.remove('hidden');
+        if (emptyState) emptyState.classList.add('hidden');
         btn.disabled = true;
         btn.innerHTML = '\u003ci class="fas fa-spinner fa-spin mr-2"\u003e\u003c/i\u003e\u003cspan\u003eGenerujem...\u003c/span\u003e';
         btn.classList.add('opacity-75');
@@ -238,6 +242,7 @@ function showLoading(show) {
         }
     } else {
         indicator.classList.add('hidden');
+        if (skeleton) skeleton.classList.add('hidden');
         btn.disabled = false;
         btn.innerHTML = '\u003ci class="fas fa-magic mr-2"\u003e\u003c/i\u003e\u003cspan\u003eGenerovať obsah\u003c/span\u003e';
         btn.classList.remove('opacity-75');
