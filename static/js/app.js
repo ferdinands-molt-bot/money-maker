@@ -3,22 +3,30 @@
 // State management
 let selectedPlatforms = ['twitter', 'linkedin'];
 let isConverting = false;
+let currentResults = null;
+
+// All available platforms
+const ALL_PLATFORMS = ['twitter', 'linkedin', 'instagram', 'facebook', 'youtube', 'newsletter', 'tiktok', 'pinterest', 'threads', 'reddit'];
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     loadDemoData();
+    updateCounters();
 });
 
 // Event Listeners
 function setupEventListeners() {
     const contentInput = document.getElementById('contentInput');
     if (contentInput) {
-        contentInput.addEventListener('input', updateCharCount);
+        contentInput.addEventListener('input', () => {
+            updateCharCount();
+            updateWordCount();
+        });
     }
 }
 
-// Character count
+// Character and word count
 function updateCharCount() {
     const content = document.getElementById('contentInput').value;
     const count = content.length;
@@ -35,6 +43,19 @@ function updateCharCount() {
     } else {
         counter.classList.remove('char-count-warning', 'char-count-danger');
     }
+}
+
+function updateWordCount() {
+    const content = document.getElementById('contentInput').value;
+    const words = content.trim().split(/\s+/).filter(w => w.length > 0).length;
+    const counter = document.getElementById('wordCount');
+    
+    counter.textContent = `${words} slov`;
+}
+
+function updateCounters() {
+    updateCharCount();
+    updateWordCount();
 }
 
 // Toggle platform selection
@@ -55,6 +76,40 @@ function togglePlatform(platform) {
         btn.classList.remove('border-gray-300', 'text-gray-600');
         btn.classList.add('bg-indigo-600', 'border-indigo-600', 'text-white');
     }
+}
+
+// Select all platforms
+function selectAllPlatforms() {
+    ALL_PLATFORMS.forEach(platform => {
+        if (!selectedPlatforms.includes(platform)) {
+            selectedPlatforms.push(platform);
+        }
+        const btn = document.getElementById(`btn-${platform}`);
+        if (btn) {
+            btn.classList.add('active');
+            btn.classList.remove('border-gray-300', 'text-gray-600');
+            btn.classList.add('bg-indigo-600', 'border-indigo-600', 'text-white');
+        }
+    });
+}
+
+// Deselect all platforms (keep only first one)
+function deselectAllPlatforms() {
+    selectedPlatforms = ['twitter'];
+    ALL_PLATFORMS.forEach(platform => {
+        const btn = document.getElementById(`btn-${platform}`);
+        if (btn) {
+            if (platform === 'twitter') {
+                btn.classList.add('active');
+                btn.classList.remove('border-gray-300', 'text-gray-600');
+                btn.classList.add('bg-indigo-600', 'border-indigo-600', 'text-white');
+            } else {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-indigo-600', 'border-indigo-600', 'text-white');
+                btn.classList.add('border-gray-300', 'text-gray-600');
+            }
+        }
+    });
 }
 
 // Main conversion function
@@ -92,8 +147,15 @@ async function convertContent() {
         const data = await response.json();
         
         if (data.success) {
+            currentResults = data.results;
             displayResults(data.results);
+            showDownloadButton(true);
             showToast('Obsah úspešne vygenerovaný!', 'success');
+            trackEvent('content_converted', {
+                platforms: selectedPlatforms.length,
+                tone: data.tone,
+                content_length: data.original_length
+            });
         } else {
             showToast(data.error || 'Nastala chyba', 'error');
         }
@@ -115,10 +177,22 @@ function showLoading(show) {
         indicator.classList.remove('hidden');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Generujem...</span>';
+        btn.classList.add('opacity-75');
     } else {
         indicator.classList.add('hidden');
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-magic mr-2"></i><span>Generovať obsah</span>';
+        btn.classList.remove('opacity-75');
+    }
+}
+
+// Show/hide download button
+function showDownloadButton(show) {
+    const btn = document.getElementById('downloadBtn');
+    if (show) {
+        btn.classList.remove('hidden');
+    } else {
+        btn.classList.add('hidden');
     }
 }
 
@@ -133,7 +207,11 @@ function displayResults(results) {
         'instagram': 'Instagram Caption',
         'facebook': 'Facebook Post',
         'youtube': 'YouTube Description',
-        'newsletter': 'Newsletter Excerpt'
+        'newsletter': 'Newsletter Excerpt',
+        'tiktok': 'TikTok Script',
+        'pinterest': 'Pinterest Pin',
+        'threads': 'Threads Post',
+        'reddit': 'Reddit Post'
     };
     
     const platformIcons = {
@@ -142,12 +220,33 @@ function displayResults(results) {
         'instagram': 'fab fa-instagram',
         'facebook': 'fab fa-facebook',
         'youtube': 'fab fa-youtube',
-        'newsletter': 'fas fa-envelope'
+        'newsletter': 'fas fa-envelope',
+        'tiktok': 'fab fa-tiktok',
+        'pinterest': 'fab fa-pinterest',
+        'threads': 'fab fa-threads',
+        'reddit': 'fab fa-reddit'
     };
     
     Object.entries(results).forEach(([platform, data]) => {
         const card = createResultCard(platform, platformNames[platform], platformIcons[platform], data);
         container.appendChild(card);
+    });
+    
+    // Animate cards in
+    animateCards();
+}
+
+// Animate result cards
+function animateCards() {
+    const cards = document.querySelectorAll('.result-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.3s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
     });
 }
 
@@ -160,33 +259,57 @@ function createResultCard(platform, name, iconClass, data) {
     
     if (platform === 'twitter' && data.tweets) {
         content = data.tweets.map((tweet, i) => 
-            `<div class="mb-2 p-2 bg-white rounded border text-sm">${escapeHtml(tweet)}</div>`
+            `<div class="mb-2 p-2 bg-white rounded border text-sm hover:border-indigo-300 transition">${escapeHtml(tweet)}</div>`
+        ).join('');
+    } else if (platform === 'threads' && data.posts) {
+        content = data.posts.map((post, i) => 
+            `<div class="mb-2 p-2 bg-white rounded border text-sm hover:border-indigo-300 transition">${escapeHtml(post)}</div>`
         ).join('');
     } else if (data.content) {
-        content = `<div class="p-3 bg-white rounded border text-sm whitespace-pre-wrap">${escapeHtml(data.content)}</div>`;
+        content = `<div class="p-3 bg-white rounded border text-sm whitespace-pre-wrap hover:border-indigo-300 transition">${escapeHtml(data.content)}</div>`;
     }
     
+    // Build metrics
     const metrics = [];
-    if (data.estimated_engagement) metrics.push(`📊 ${data.estimated_engagement}`);
+    if (data.estimated_engagement) metrics.push(`📊 ${data.estimated_engagement} engagement`);
     if (data.estimated_reach) metrics.push(`🎯 ${data.estimated_reach}`);
     if (data.character_count) metrics.push(`📝 ${data.character_count} znakov`);
     if (data.hashtag_count) metrics.push(`🏷️ ${data.hashtag_count} hashtagov`);
+    if (data.viral_potential) metrics.push(`🔥 ${data.viral_potential} viral`);
+    if (data.count) metrics.push(`📱 ${data.count} posts`);
+    
+    // Get platform color
+    const platformColors = {
+        'twitter': '#1DA1F2',
+        'linkedin': '#0A66C2',
+        'instagram': '#E4405F',
+        'facebook': '#1877F2',
+        'youtube': '#FF0000',
+        'newsletter': '#4f46e5',
+        'tiktok': '#000000',
+        'pinterest': '#BD081C',
+        'threads': '#000000',
+        'reddit': '#FF4500'
+    };
+    const color = platformColors[platform] || '#4f46e5';
     
     div.innerHTML = `
         <div class="flex items-center justify-between mb-3">
             <div class="flex items-center">
-                <i class="${iconClass} text-xl mr-2"></i>
+                <i class="${iconClass} text-xl mr-2" style="color: ${color}"></i>
                 <span class="font-semibold">${name}</span>
             </div>
-            <button onclick="copyToClipboard(this, '${platform}')" class="copy-btn px-3 py-1 rounded border text-sm flex items-center">
-                <i class="fas fa-copy mr-1"></i>
-                <span>Kopírovať</span>
-            </button>
+            <div class="flex gap-2">
+                <button onclick="copyToClipboard(this, '${platform}')" class="copy-btn px-3 py-1 rounded border text-sm flex items-center hover:bg-indigo-50 transition">
+                    <i class="fas fa-copy mr-1"></i>
+                    <span>Kopírovať</span>
+                </button>
+            </div>
         </div>
         <div class="result-content mb-3" data-platform="${platform}">
             ${content}
         </div>
-        ${metrics.length > 0 ? `<div class="text-xs text-gray-500">${metrics.join(' • ')}</div>` : ''}
+        ${metrics.length > 0 ? `<div class="text-xs text-gray-500 flex flex-wrap gap-2">${metrics.map(m => `<span class="bg-gray-100 px-2 py-1 rounded">${m}</span>`).join('')}</div>` : ''}
     `;
     
     return div;
@@ -205,32 +328,101 @@ function copyToClipboard(btn, platform) {
     
     navigator.clipboard.writeText(textToCopy.trim()).then(() => {
         btn.classList.add('copied');
+        const icon = btn.querySelector('i');
         const span = btn.querySelector('span');
-        const originalText = span.textContent;
+        
+        icon.classList.remove('fa-copy');
+        icon.classList.add('fa-check');
         span.textContent = 'Skopírované!';
         
         setTimeout(() => {
             btn.classList.remove('copied');
-            span.textContent = originalText;
+            icon.classList.remove('fa-check');
+            icon.classList.add('fa-copy');
+            span.textContent = 'Kopírovať';
         }, 2000);
         
         showToast('Skopírované do schránky!', 'success');
+    }).catch(err => {
+        showToast('Nepodarilo sa skopírovať', 'error');
     });
+}
+
+// Download all results
+function downloadAllResults() {
+    if (!currentResults) return;
+    
+    let text = '# ContentMultiplier - Vygenerovaný obsah\n';
+    text += `Dátum: ${new Date().toLocaleString()}\n`;
+    text += '='.repeat(50) + '\n\n';
+    
+    const platformNames = {
+        'twitter': 'Twitter/X Thread',
+        'linkedin': 'LinkedIn Post',
+        'instagram': 'Instagram Caption',
+        'facebook': 'Facebook Post',
+        'youtube': 'YouTube Description',
+        'newsletter': 'Newsletter Excerpt',
+        'tiktok': 'TikTok Script',
+        'pinterest': 'Pinterest Pin',
+        'threads': 'Threads Post',
+        'reddit': 'Reddit Post'
+    };
+    
+    Object.entries(currentResults).forEach(([platform, data]) => {
+        text += `## ${platformNames[platform] || platform}\n`;
+        text += '-'.repeat(40) + '\n';
+        
+        if (data.tweets) {
+            text += data.tweets.join('\n\n') + '\n';
+        } else if (data.posts) {
+            text += data.posts.join('\n\n') + '\n';
+        } else if (data.content) {
+            text += data.content + '\n';
+        }
+        
+        text += '\n\n';
+    });
+    
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `content-multiplier-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showToast('Výsledky stiahnuté!', 'success');
+    trackEvent('results_downloaded', { platforms: Object.keys(currentResults).length });
 }
 
 // Show toast notification
 function showToast(message, type = 'success') {
+    // Remove existing toasts
+    const existing = document.querySelectorAll('.toast');
+    existing.forEach(t => t.remove());
+    
     const toast = document.createElement('div');
     toast.className = 'toast';
     
     const colors = {
         success: '#10b981',
         error: '#ef4444',
-        warning: '#f59e0b'
+        warning: '#f59e0b',
+        info: '#3b82f6'
+    };
+    
+    const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
     };
     
     toast.style.background = colors[type] || colors.success;
-    toast.textContent = message;
+    toast.innerHTML = `<span style="margin-right: 8px;">${icons[type] || icons.success}</span>${message}`;
     
     document.body.appendChild(toast);
     
@@ -259,8 +451,10 @@ async function showDemo() {
         const data = await response.json();
         
         document.getElementById('contentInput').value = data.demo_input;
-        updateCharCount();
+        updateCounters();
+        currentResults = data.demo_results;
         displayResults(data.demo_results);
+        showDownloadButton(true);
         
         scrollToConverter();
         showToast('Demo načítané! Pozrite si výsledky.', 'success');
@@ -300,6 +494,11 @@ document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         convertContent();
     }
+    
+    // Escape to close modals (if any)
+    if (e.key === 'Escape') {
+        // Close any open modals
+    }
 });
 
 // Analytics (simple)
@@ -312,4 +511,26 @@ function trackEvent(eventName, data = {}) {
 trackEvent('page_load', {
     url: window.location.href,
     timestamp: new Date().toISOString()
+});
+
+// Intersection Observer for animations
+const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+        }
+    });
+}, observerOptions);
+
+// Observe elements for animation
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.hover-card, .result-card').forEach(el => {
+        observer.observe(el);
+    });
 });

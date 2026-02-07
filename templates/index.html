@@ -99,7 +99,11 @@
                         <h3 class="text-lg font-semibold text-gray-900">
                             <i class="fas fa-pen-fancy text-indigo-600 mr-2"></i>Váš obsah
                         </h3>
-                        <span id="charCount" class="text-sm text-gray-500">0 znakov</span>
+                        <div class="flex items-center gap-3 text-sm">
+                            <span id="wordCount" class="text-gray-500">0 slov</span>
+                            <span class="text-gray-300">|</span>
+                            <span id="charCount" class="text-gray-500">0 znakov</span>
+                        </div>
                     </div>
                     <textarea 
                         id="contentInput" 
@@ -113,7 +117,7 @@ Príklad: Artificial Intelligence is transforming how we create content. By usin
                     <!-- Platform Selection -->
                     <div class="mt-6">
                         <h4 class="text-sm font-semibold text-gray-700 mb-3">Vyberte platformy:</h4>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap gap-2" id="platformButtons">
                             <button onclick="togglePlatform('twitter')" id="btn-twitter" class="platform-btn active px-4 py-2 rounded-full border-2 border-indigo-600 bg-indigo-600 text-white text-sm font-medium transition">
                                 <i class="fab fa-twitter mr-1"></i> Twitter/X
                             </button>
@@ -132,6 +136,23 @@ Príklad: Artificial Intelligence is transforming how we create content. By usin
                             <button onclick="togglePlatform('newsletter')" id="btn-newsletter" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
                                 <i class="fas fa-envelope mr-1"></i> Newsletter
                             </button>
+                            <button onclick="togglePlatform('tiktok')" id="btn-tiktok" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
+                                <i class="fab fa-tiktok mr-1"></i> TikTok
+                            </button>
+                            <button onclick="togglePlatform('pinterest')" id="btn-pinterest" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
+                                <i class="fab fa-pinterest mr-1"></i> Pinterest
+                            </button>
+                            <button onclick="togglePlatform('threads')" id="btn-threads" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
+                                <i class="fab fa-threads mr-1"></i> Threads
+                            </button>
+                            <button onclick="togglePlatform('reddit')" id="btn-reddit" class="platform-btn px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 text-sm font-medium transition hover:border-indigo-400">
+                                <i class="fab fa-reddit mr-1"></i> Reddit
+                            </button>
+                        </div>
+                        <div class="mt-2 flex gap-2">
+                            <button onclick="selectAllPlatforms()" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Vybrať všetky</button>
+                            <span class="text-gray-300">|</span>
+                            <button onclick="deselectAllPlatforms()" class="text-xs text-gray-500 hover:text-gray-700">Zrušiť výber</button>
                         </div>
                     </div>
 
@@ -159,9 +180,14 @@ Príklad: Artificial Intelligence is transforming how we create content. By usin
                         <h3 class="text-lg font-semibold text-gray-900">
                             <i class="fas fa-bolt text-yellow-500 mr-2"></i>Výsledky
                         </h3>
-                        <div id="loadingIndicator" class="hidden">
-                            <i class="fas fa-spinner fa-spin text-indigo-600"></i>
-                            <span class="ml-2 text-sm text-gray-600">Generujem...</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="downloadAllResults()" id="downloadBtn" class="hidden px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-sm font-medium hover:bg-indigo-200 transition">
+                                <i class="fas fa-download mr-1"></i>Stiahnuť všetko
+                            </button>
+                            <div id="loadingIndicator" class="hidden">
+                                <i class="fas fa-spinner fa-spin text-indigo-600"></i>
+                                <span class="ml-2 text-sm text-gray-600">Generujem...</span>
+                            </div>
                         </div>
                     </div>
 
