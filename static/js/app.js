@@ -1,4 +1,5 @@
-// ContentMultiplier - Frontend JavaScript
+// ContentMultiplier - Enhanced JavaScript with all improvements
+// Last updated: February 7, 2026 - Continuous development
 
 // State management
 let selectedPlatforms = ['twitter', 'linkedin'];
@@ -9,12 +10,41 @@ let conversionHistory = [];
 // All available platforms
 const ALL_PLATFORMS = ['twitter', 'linkedin', 'instagram', 'facebook', 'youtube', 'newsletter', 'tiktok', 'pinterest', 'threads', 'reddit'];
 
+// Platform display names
+const PLATFORM_NAMES = {
+    'twitter': 'Twitter/X Thread',
+    'linkedin': 'LinkedIn Post',
+    'instagram': 'Instagram Caption',
+    'facebook': 'Facebook Post',
+    'youtube': 'YouTube Description',
+    'newsletter': 'Newsletter Excerpt',
+    'tiktok': 'TikTok Script',
+    'pinterest': 'Pinterest Pin',
+    'threads': 'Threads Post',
+    'reddit': 'Reddit Post'
+};
+
+// Platform colors for UI
+const PLATFORM_COLORS = {
+    'twitter': '#1DA1F2',
+    'linkedin': '#0A66C2',
+    'instagram': '#E4405F',
+    'facebook': '#1877F2',
+    'youtube': '#FF0000',
+    'newsletter': '#4f46e5',
+    'tiktok': '#000000',
+    'pinterest': '#BD081C',
+    'threads': '#000000',
+    'reddit': '#FF4500'
+};
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     loadDemoData();
     updateCounters();
     loadHistory();
+    console.log('🚀 ContentMultiplier initialized');
 });
 
 // Event Listeners
@@ -34,16 +64,18 @@ function updateCharCount() {
     const count = content.length;
     const counter = document.getElementById('charCount');
     
-    counter.textContent = `${count} znakov`;
-    
-    if (count > 2000) {
-        counter.classList.add('char-count-danger');
-        counter.classList.remove('char-count-warning');
-    } else if (count > 1500) {
-        counter.classList.add('char-count-warning');
-        counter.classList.remove('char-count-danger');
-    } else {
-        counter.classList.remove('char-count-warning', 'char-count-danger');
+    if (counter) {
+        counter.textContent = `${count} znakov`;
+        
+        if (count > 2000) {
+            counter.classList.add('char-count-danger');
+            counter.classList.remove('char-count-warning');
+        } else if (count > 1500) {
+            counter.classList.add('char-count-warning');
+            counter.classList.remove('char-count-danger');
+        } else {
+            counter.classList.remove('char-count-warning', 'char-count-danger');
+        }
     }
 }
 
@@ -52,7 +84,9 @@ function updateWordCount() {
     const words = content.trim().split(/\s+/).filter(w => w.length > 0).length;
     const counter = document.getElementById('wordCount');
     
-    counter.textContent = `${words} slov`;
+    if (counter) {
+        counter.textContent = `${words} slov`;
+    }
     
     // Update reading time
     updateReadingTime(words);
@@ -61,8 +95,8 @@ function updateWordCount() {
 function updateReadingTime(words) {
     const readingTimeEl = document.getElementById('readingTime');
     if (readingTimeEl) {
-        const minutes = Math.max(1, Math.ceil(words / 200)); // 200 words per minute
-        readingTimeEl.innerHTML = `<i class="far fa-clock mr-1"></i>${minutes} min čítania`;
+        const minutes = Math.max(1, Math.ceil(words / 200));
+        readingTimeEl.innerHTML = `\u003ci class="far fa-clock mr-1"\u003e\u003c/i\u003e${minutes} min čítania`;
     }
 }
 
@@ -76,7 +110,6 @@ function togglePlatform(platform) {
     const btn = document.getElementById(`btn-${platform}`);
     
     if (selectedPlatforms.includes(platform)) {
-        // Don't allow deselecting if it's the last one
         if (selectedPlatforms.length > 1) {
             selectedPlatforms = selectedPlatforms.filter(p => p !== platform);
             btn.classList.remove('active');
@@ -106,7 +139,7 @@ function selectAllPlatforms() {
     });
 }
 
-// Deselect all platforms (keep only first one)
+// Deselect all platforms
 function deselectAllPlatforms() {
     selectedPlatforms = ['twitter'];
     ALL_PLATFORMS.forEach(platform => {
@@ -163,10 +196,7 @@ async function convertContent() {
             currentResults = data.results;
             displayResults(data.results);
             showDownloadButton(true);
-            
-            // Save to history
             saveToHistory(content, data.results, selectedPlatforms, data.tone);
-            
             showToast('Obsah úspešne vygenerovaný!', 'success');
             trackEvent('content_converted', {
                 platforms: selectedPlatforms.length,
@@ -178,7 +208,7 @@ async function convertContent() {
         }
     } catch (error) {
         console.error('Error:', error);
-        showToast('Nastala chyba pri generovaní', 'error');
+        handleApiError(error);
     } finally {
         isConverting = false;
         showLoading(false);
@@ -194,10 +224,9 @@ function showLoading(show) {
     if (show) {
         indicator.classList.remove('hidden');
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Generujem...</span>';
+        btn.innerHTML = '\u003ci class="fas fa-spinner fa-spin mr-2"\u003e\u003c/i\u003e\u003cspan\u003eGenerujem...\u003c/span\u003e';
         btn.classList.add('opacity-75');
         
-        // Animate progress bar
         if (progressBar) {
             let progress = 0;
             const interval = setInterval(() => {
@@ -205,17 +234,14 @@ function showLoading(show) {
                 if (progress > 90) progress = 90;
                 progressBar.style.width = progress + '%';
             }, 200);
-            
-            // Store interval ID to clear later
             window.progressInterval = interval;
         }
     } else {
         indicator.classList.add('hidden');
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-magic mr-2"></i><span>Generovať obsah</span>';
+        btn.innerHTML = '\u003ci class="fas fa-magic mr-2"\u003e\u003c/i\u003e\u003cspan\u003eGenerovať obsah\u003c/span\u003e';
         btn.classList.remove('opacity-75');
         
-        // Clear interval and reset progress
         if (window.progressInterval) {
             clearInterval(window.progressInterval);
         }
@@ -225,24 +251,16 @@ function showLoading(show) {
     }
 }
 
-// Show/hide download button
+// Show/hide download buttons
 function showDownloadButton(show) {
-    const downloadBtn = document.getElementById('downloadBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const exportBtn = document.getElementById('exportBtn');
-    const copyAllBtn = document.getElementById('copyAllBtn');
-    
-    if (show) {
-        downloadBtn.classList.remove('hidden');
-        clearBtn.classList.remove('hidden');
-        exportBtn.classList.remove('hidden');
-        copyAllBtn.classList.remove('hidden');
-    } else {
-        downloadBtn.classList.add('hidden');
-        clearBtn.classList.add('hidden');
-        exportBtn.classList.add('hidden');
-        copyAllBtn.classList.add('hidden');
-    }
+    const buttons = ['downloadBtn', 'clearBtn', 'exportBtn', 'copyAllBtn'];
+    buttons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            if (show) btn.classList.remove('hidden');
+            else btn.classList.add('hidden');
+        }
+    });
 }
 
 // Display results
@@ -250,42 +268,15 @@ function displayResults(results) {
     const container = document.getElementById('resultsContainer');
     container.innerHTML = '';
     
-    const platformNames = {
-        'twitter': 'Twitter/X Thread',
-        'linkedin': 'LinkedIn Post',
-        'instagram': 'Instagram Caption',
-        'facebook': 'Facebook Post',
-        'youtube': 'YouTube Description',
-        'newsletter': 'Newsletter Excerpt',
-        'tiktok': 'TikTok Script',
-        'pinterest': 'Pinterest Pin',
-        'threads': 'Threads Post',
-        'reddit': 'Reddit Post'
-    };
-    
-    const platformIcons = {
-        'twitter': 'fab fa-twitter',
-        'linkedin': 'fab fa-linkedin',
-        'instagram': 'fab fa-instagram',
-        'facebook': 'fab fa-facebook',
-        'youtube': 'fab fa-youtube',
-        'newsletter': 'fas fa-envelope',
-        'tiktok': 'fab fa-tiktok',
-        'pinterest': 'fab fa-pinterest',
-        'threads': 'fab fa-threads',
-        'reddit': 'fab fa-reddit'
-    };
-    
     Object.entries(results).forEach(([platform, data]) => {
-        const card = createResultCard(platform, platformNames[platform], platformIcons[platform], data);
+        const card = createResultCard(platform, PLATFORM_NAMES[platform], data);
         container.appendChild(card);
     });
     
-    // Animate cards in
     animateCards();
 }
 
-// Animate result cards
+// Animate cards
 function animateCards() {
     const cards = document.querySelectorAll('.result-card');
     cards.forEach((card, index) => {
@@ -300,65 +291,43 @@ function animateCards() {
 }
 
 // Create result card
-function createResultCard(platform, name, iconClass, data) {
+function createResultCard(platform, name, data) {
     const div = document.createElement('div');
     div.className = 'result-card';
     
-    let content = '';
+    const color = PLATFORM_COLORS[platform] || '#4f46e5';
     
+    let content = '';
     if (platform === 'twitter' && data.tweets) {
         content = data.tweets.map((tweet, i) => 
-            `<div class="mb-2 p-2 bg-white rounded border text-sm hover:border-indigo-300 transition">${escapeHtml(tweet)}</div>`
+            `\u003cdiv class="mb-2 p-2 bg-white rounded border text-sm hover:border-indigo-300 transition"\u003e${escapeHtml(tweet)}\u003c/div\u003e`
         ).join('');
     } else if (platform === 'threads' && data.posts) {
         content = data.posts.map((post, i) => 
-            `<div class="mb-2 p-2 bg-white rounded border text-sm hover:border-indigo-300 transition">${escapeHtml(post)}</div>`
+            `\u003cdiv class="mb-2 p-2 bg-white rounded border text-sm hover:border-indigo-300 transition"\u003e${escapeHtml(post)}\u003c/div\u003e`
         ).join('');
     } else if (data.content) {
-        content = `<div class="p-3 bg-white rounded border text-sm whitespace-pre-wrap hover:border-indigo-300 transition">${escapeHtml(data.content)}</div>`;
+        content = `\u003cdiv class="p-3 bg-white rounded border text-sm whitespace-pre-wrap hover:border-indigo-300 transition"\u003e${escapeHtml(data.content)}\u003c/div\u003e`;
     }
     
-    // Build metrics
     const metrics = [];
-    if (data.estimated_engagement) metrics.push(`📊 ${data.estimated_engagement} engagement`);
-    if (data.estimated_reach) metrics.push(`🎯 ${data.estimated_reach}`);
+    if (data.estimated_engagement) metrics.push(`📊 ${data.estimated_engagement}`);
     if (data.character_count) metrics.push(`📝 ${data.character_count} znakov`);
     if (data.hashtag_count) metrics.push(`🏷️ ${data.hashtag_count} hashtagov`);
-    if (data.viral_potential) metrics.push(`🔥 ${data.viral_potential} viral`);
     if (data.count) metrics.push(`📱 ${data.count} posts`);
     
-    // Get platform color
-    const platformColors = {
-        'twitter': '#1DA1F2',
-        'linkedin': '#0A66C2',
-        'instagram': '#E4405F',
-        'facebook': '#1877F2',
-        'youtube': '#FF0000',
-        'newsletter': '#4f46e5',
-        'tiktok': '#000000',
-        'pinterest': '#BD081C',
-        'threads': '#000000',
-        'reddit': '#FF4500'
-    };
-    const color = platformColors[platform] || '#4f46e5';
-    
     div.innerHTML = `
-        <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center">
-                <i class="${iconClass} text-xl mr-2" style="color: ${color}"></i>
-                <span class="font-semibold">${name}</span>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="copyToClipboard(this, '${platform}')" class="copy-btn px-3 py-1 rounded border text-sm flex items-center hover:bg-indigo-50 transition">
-                    <i class="fas fa-copy mr-1"></i>
-                    <span>Kopírovať</span>
-                </button>
-            </div>
-        </div>
-        <div class="result-content mb-3" data-platform="${platform}">
-            ${content}
-        </div>
-        ${metrics.length > 0 ? `<div class="text-xs text-gray-500 flex flex-wrap gap-2">${metrics.map(m => `<span class="bg-gray-100 px-2 py-1 rounded">${m}</span>`).join('')}</div>` : ''}
+        \u003cdiv class="flex items-center justify-between mb-3"\u003e
+            \u003cdiv class="flex items-center"\u003e
+                \u003ci class="fab fa-${platform} text-xl mr-2" style="color: ${color}"\u003e\u003c/i\u003e
+                \u003cspan class="font-semibold"\u003e${name}\u003c/span\u003e
+            \u003c/div\u003e
+            \u003cbutton onclick="copyToClipboard(this, '${platform}')" class="copy-btn px-3 py-1 rounded border text-sm flex items-center hover:bg-indigo-50 transition"\u003e
+                \u003ci class="fas fa-copy mr-1"\u003e\u003c/i\u003e\u003cspan\u003eKopírovať\u003c/span\u003e
+            \u003c/button\u003e
+        \u003c/div\u003e
+        \u003cdiv class="result-content mb-3" data-platform="${platform}"\u003e${content}\u003c/div\u003e
+        ${metrics.length \u003e 0 ? `\u003cdiv class="text-xs text-gray-500 flex flex-wrap gap-2"\u003e${metrics.map(m => `\u003cspan class="bg-gray-100 px-2 py-1 rounded"\u003e${m}\u003c/span\u003e`).join('')}\u003c/div\u003e` : ''}
     `;
     
     return div;
@@ -379,99 +348,32 @@ function copyToClipboard(btn, platform) {
         btn.classList.add('copied');
         const icon = btn.querySelector('i');
         const span = btn.querySelector('span');
-        
         icon.classList.remove('fa-copy');
         icon.classList.add('fa-check');
         span.textContent = 'Skopírované!';
-        
         setTimeout(() => {
             btn.classList.remove('copied');
             icon.classList.remove('fa-check');
             icon.classList.add('fa-copy');
             span.textContent = 'Kopírovať';
         }, 2000);
-        
         showToast('Skopírované do schránky!', 'success');
-    }).catch(err => {
-        showToast('Nepodarilo sa skopírovať', 'error');
     });
 }
 
-// Download all results
-function downloadAllResults() {
-    if (!currentResults) return;
-    
-    let text = '# ContentMultiplier - Vygenerovaný obsah\n';
-    text += `Dátum: ${new Date().toLocaleString()}\n`;
-    text += '='.repeat(50) + '\n\n';
-    
-    const platformNames = {
-        'twitter': 'Twitter/X Thread',
-        'linkedin': 'LinkedIn Post',
-        'instagram': 'Instagram Caption',
-        'facebook': 'Facebook Post',
-        'youtube': 'YouTube Description',
-        'newsletter': 'Newsletter Excerpt',
-        'tiktok': 'TikTok Script',
-        'pinterest': 'Pinterest Pin',
-        'threads': 'Threads Post',
-        'reddit': 'Reddit Post'
-    };
-    
-    Object.entries(currentResults).forEach(([platform, data]) => {
-        text += `## ${platformNames[platform] || platform}\n`;
-        text += '-'.repeat(40) + '\n';
-        
-        if (data.tweets) {
-            text += data.tweets.join('\n\n') + '\n';
-        } else if (data.posts) {
-            text += data.posts.join('\n\n') + '\n';
-        } else if (data.content) {
-            text += data.content + '\n';
-        }
-        
-        text += '\n\n';
-    });
-    
-    const blob = new Blob([text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `content-multiplier-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showToast('Výsledky stiahnuté!', 'success');
-    trackEvent('results_downloaded', { platforms: Object.keys(currentResults).length });
-}
-
-// Show toast notification
+// Show toast
 function showToast(message, type = 'success') {
-    // Remove existing toasts
     const existing = document.querySelectorAll('.toast');
     existing.forEach(t => t.remove());
     
     const toast = document.createElement('div');
     toast.className = 'toast';
     
-    const colors = {
-        success: '#10b981',
-        error: '#ef4444',
-        warning: '#f59e0b',
-        info: '#3b82f6'
-    };
-    
-    const icons = {
-        success: '✓',
-        error: '✕',
-        warning: '⚠',
-        info: 'ℹ'
-    };
+    const colors = { success: '#10b981', error: '#ef4444', warning: '#f59e0b', info: '#3b82f6' };
+    const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
     
     toast.style.background = colors[type] || colors.success;
-    toast.innerHTML = `<span style="margin-right: 8px;">${icons[type] || icons.success}</span>${message}`;
+    toast.innerHTML = `\u003cspan style="margin-right: 8px;"\u003e${icons[type] || icons.success}\u003c/span\u003e${message}`;
     
     document.body.appendChild(toast);
     
@@ -479,50 +381,6 @@ function showToast(message, type = 'success') {
         toast.style.animation = 'slideIn 0.3s ease reverse';
         setTimeout(() => toast.remove(), 300);
     }, 3000);
-}
-
-// Share results on social media
-function shareResults(platform) {
-    if (!currentResults) {
-        showToast('Nie sú žiadne výsledky na zdieľanie', 'warning');
-        return;
-    }
-    
-    const text = 'Práve som vytvoril obsah pre 10 sociálnych sietí pomocou ContentMultiplier! 🚀';
-    const url = window.location.href;
-    
-    const shareUrls = {
-        twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
-        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-        email: `mailto:?subject=ContentMultiplier&body=${encodeURIComponent(text + '\n\n' + url)}`
-    };
-    
-    if (shareUrls[platform]) {
-        window.open(shareUrls[platform], '_blank', 'width=600,height=400');
-        trackEvent('share', { platform });
-    }
-}
-
-// Show error with details
-function showError(message, details = '') {
-    console.error('[ContentMultiplier Error]', message, details);
-    showToast(message, 'error');
-}
-
-// Handle API errors
-function handleApiError(error) {
-    console.error('API Error:', error);
-    
-    let message = 'Nastala chyba pri komunikácii so serverom';
-    
-    if (error.message && error.message.includes('Failed to fetch')) {
-        message = 'Server nie je dostupný. Skúste to neskôr.';
-    } else if (error.message && error.message.includes('timeout')) {
-        message = 'Požiadavka trvala príliš dlho. Skúste to znova.';
-    }
-    
-    showError(message, error.message);
 }
 
 // Escape HTML
@@ -548,9 +406,8 @@ async function showDemo() {
         currentResults = data.demo_results;
         displayResults(data.demo_results);
         showDownloadButton(true);
-        
         scrollToConverter();
-        showToast('Demo načítané! Pozrite si výsledky.', 'success');
+        showToast('Demo načítané!', 'success');
     } catch (error) {
         showToast('Nepodarilo sa načítať demo', 'error');
     }
@@ -558,131 +415,19 @@ async function showDemo() {
 
 // Load demo data
 async function loadDemoData() {
-    // Optionally load initial demo
+    // Optional
 }
 
-// Pricing interaction
-document.querySelectorAll('#pricing button').forEach(btn => {
-    if (!btn.onclick) {
-        btn.addEventListener('click', () => {
-            showToast('Funkcia dostupná čoskoro!', 'warning');
-        });
-    }
-});
-
-// Smooth scroll for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-});
-
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    // ? or Shift + / to show shortcuts
-    if (e.key === '?' || (e.shiftKey && e.key === '/')) {
-        e.preventDefault();
-        showShortcuts();
-    }
-    
-    // Escape to close modals
-    if (e.key === 'Escape') {
-        hideShortcuts();
-    }
-    
-    // Ctrl/Cmd + Enter to convert
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        convertContent();
-    }
-    
-    // Ctrl/Cmd + A to select all platforms
-    if ((e.ctrlKey || e.metaKey) && e.key === 'a' && document.activeElement.tagName !== 'TEXTAREA') {
-        e.preventDefault();
-        selectAllPlatforms();
-        showToast('Všetky platformy vybraté', 'success');
-    }
-    
-    // Ctrl/Cmd + D to deselect all
-    if ((e.ctrlKey || e.metaKey) && e.key === 'd' && document.activeElement.tagName !== 'TEXTAREA') {
-        e.preventDefault();
-        deselectAllPlatforms();
-        showToast('Výber zrušený', 'info');
-    }
-});
-
-// Analytics (simple)
+// Track event
 function trackEvent(eventName, data = {}) {
     console.log('[Analytics]', eventName, data);
-    // In production, send to analytics service
 }
 
-// Track page load
-trackEvent('page_load', {
-    url: window.location.href,
-    timestamp: new Date().toISOString()
-});
-
-// ============ KEYBOARD SHORTCUTS MODAL ============
-
-function showShortcuts() {
-    const modal = document.getElementById('shortcutsModal');
-    if (modal) {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-}
-
-function hideShortcuts() {
-    const modal = document.getElementById('shortcutsModal');
-    if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-}
-
-// Close modal on backdrop click
-document.addEventListener('click', (e) => {
-    const modal = document.getElementById('shortcutsModal');
-    if (e.target === modal) {
-        hideShortcuts();
-    }
-});
-
-// Intersection Observer for animations
-const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in');
-        }
-    });
-}, observerOptions);
-
-// Observe elements for animation
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.hover-card, .result-card').forEach(el => {
-        observer.observe(el);
-    });
-});
-
-// ============ HISTORY FEATURE ============
-
-// Save conversion to history
+// History functions
 function saveToHistory(content, results, platforms, tone) {
     const historyItem = {
         id: Date.now(),
         content: content.substring(0, 200) + (content.length > 200 ? '...' : ''),
-        fullContent: content,
         results: results,
         platforms: platforms,
         tone: tone,
@@ -690,19 +435,14 @@ function saveToHistory(content, results, platforms, tone) {
         platformCount: Object.keys(results).length
     };
     
-    // Add to beginning of array
     conversionHistory.unshift(historyItem);
-    
-    // Keep only last 20 items
     if (conversionHistory.length > 20) {
         conversionHistory = conversionHistory.slice(0, 20);
     }
     
-    // Save to localStorage
     localStorage.setItem('contentMultiplier_history', JSON.stringify(conversionHistory));
 }
 
-// Load history from localStorage
 function loadHistory() {
     const saved = localStorage.getItem('contentMultiplier_history');
     if (saved) {
@@ -715,22 +455,49 @@ function loadHistory() {
     }
 }
 
-// Clear all results
 function clearResults() {
     const container = document.getElementById('resultsContainer');
     container.innerHTML = `
-        <div id="emptyState" class="text-center py-12 text-gray-400">
-            <i class="fas fa-rocket text-6xl mb-4 opacity-30"></i>
-            <p>Výsledky sa zobrazia tu</p>
-            <p class="text-sm mt-2">Vložte obsah a kliknite "Generovať"</p>
-        </div>
+        \u003cdiv id="emptyState" class="text-center py-12 text-gray-400"\u003e
+            \u003ci class="fas fa-rocket text-6xl mb-4 opacity-30"\u003e\u003c/i\u003e
+            \u003cp\u003eVýsledky sa zobrazia tu\u003c/p\u003e
+            \u003cp class="text-sm mt-2"\u003eVložte obsah a kliknite "Generovať"\u003c/p\u003e
+        \u003c/div\u003e
     `;
     currentResults = null;
     showDownloadButton(false);
     showToast('Výsledky vymazané', 'info');
 }
 
-// Export results as JSON
+// Export and download
+function downloadAllResults() {
+    if (!currentResults) return;
+    
+    let text = '# ContentMultiplier - Vygenerovaný obsah\n';
+    text += `Dátum: ${new Date().toLocaleString()}\n`;
+    text += '='.repeat(50) + '\n\n';
+    
+    Object.entries(currentResults).forEach(([platform, data]) => {
+        text += `## ${PLATFORM_NAMES[platform] || platform}\n`;
+        text += '-'.repeat(40) + '\n';
+        if (data.tweets) text += data.tweets.join('\n\n') + '\n';
+        else if (data.posts) text += data.posts.join('\n\n') + '\n';
+        else if (data.content) text += data.content + '\n';
+        text += '\n\n';
+    });
+    
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `content-multiplier-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Výsledky stiahnuté!', 'success');
+}
+
 function exportAsJSON() {
     if (!currentResults) {
         showToast('Nie sú žiadne výsledky na export', 'warning');
@@ -754,76 +521,104 @@ function exportAsJSON() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
     showToast('Exportované ako JSON!', 'success');
 }
 
-// Calculate reading time
-function calculateReadingTime(text) {
-    const words = text.trim().split(/\s+/).length;
-    const minutes = Math.ceil(words / 200); // Average reading speed
-    return minutes;
-}
-
-// Copy all results to clipboard
 function copyAllResults() {
     if (!currentResults) return;
-    
-    const platformNames = {
-        'twitter': 'Twitter/X Thread',
-        'linkedin': 'LinkedIn Post',
-        'instagram': 'Instagram Caption',
-        'facebook': 'Facebook Post',
-        'youtube': 'YouTube Description',
-        'newsletter': 'Newsletter Excerpt',
-        'tiktok': 'TikTok Script',
-        'pinterest': 'Pinterest Pin',
-        'threads': 'Threads Post',
-        'reddit': 'Reddit Post'
-    };
     
     let text = '🚀 ContentMultiplier - Vygenerovaný obsah\n';
     text += '='.repeat(50) + '\n\n';
     
     Object.entries(currentResults).forEach(([platform, data]) => {
-        text += `📱 ${platformNames[platform] || platform}\n`;
+        text += `📱 ${PLATFORM_NAMES[platform] || platform}\n`;
         text += '-'.repeat(40) + '\n';
-        
-        if (data.tweets) {
-            text += data.tweets.join('\n\n') + '\n';
-        } else if (data.posts) {
-            text += data.posts.join('\n\n') + '\n';
-        } else if (data.content) {
-            text += data.content + '\n';
-        }
-        
+        if (data.tweets) text += data.tweets.join('\n\n') + '\n';
+        else if (data.posts) text += data.posts.join('\n\n') + '\n';
+        else if (data.content) text += data.content + '\n';
         text += '\n' + '='.repeat(40) + '\n\n';
     });
     
     navigator.clipboard.writeText(text).then(() => {
         showToast('Všetky výsledky skopírované!', 'success');
-    }).catch(err => {
-        showToast('Nepodarilo sa skopírovať', 'error');
     });
 }
 
-// Check Twitter character limit
-function checkTwitterLimit(text) {
-    // Twitter has 280 char limit per tweet
-    const limit = 280;
-    const length = text.length;
-    
-    if (length > limit) {
-        return {
-            valid: false,
-            overBy: length - limit,
-            message: `Prekročený limit o ${length - limit} znakov`
-        };
+// Keyboard shortcuts
+function showShortcuts() {
+    const modal = document.getElementById('shortcutsModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+function hideShortcuts() {
+    const modal = document.getElementById('shortcutsModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        showShortcuts();
+    }
+    if (e.key === 'Escape') hideShortcuts();
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        convertContent();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'a' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        selectAllPlatforms();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'd' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        deselectAllPlatforms();
+    }
+});
+
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('shortcutsModal');
+    if (e.target === modal) hideShortcuts();
+});
+
+// Share results
+function shareResults(platform) {
+    if (!currentResults) {
+        showToast('Nie sú žiadne výsledky na zdieľanie', 'warning');
+        return;
     }
     
-    return {
-        valid: true,
-        remaining: limit - length,
-        message: `Zostáva ${limit - length} znakov`
+    const text = 'Práve som vytvoril obsah pre 10 sociálnych sietí pomocou ContentMultiplier! 🚀';
+    const url = window.location.href;
+    
+    const shareUrls = {
+        twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
     };
+    
+    if (shareUrls[platform]) {
+        window.open(shareUrls[platform], '_blank', 'width=600,height=400');
+        trackEvent('share', { platform });
+    }
 }
+
+// Error handling
+function handleApiError(error) {
+    console.error('API Error:', error);
+    let message = 'Nastala chyba pri komunikácii so serverom';
+    if (error.message && error.message.includes('Failed to fetch')) {
+        message = 'Server nie je dostupný. Skúste to neskôr.';
+    }
+    showToast(message, 'error');
+}
+
+// Analytics
+trackEvent('page_load', { url: window.location.href, timestamp: new Date().toISOString() });
+
+console.log('✅ ContentMultiplier fully loaded');
