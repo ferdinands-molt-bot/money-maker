@@ -178,17 +178,39 @@ async function convertContent() {
 function showLoading(show) {
     const indicator = document.getElementById('loadingIndicator');
     const btn = document.getElementById('convertBtn');
-    
+    const progressBar = document.getElementById('progressBarFill');
+
     if (show) {
         indicator.classList.remove('hidden');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Generujem...</span>';
         btn.classList.add('opacity-75');
+        
+        // Animate progress bar
+        if (progressBar) {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                progressBar.style.width = progress + '%';
+            }, 200);
+            
+            // Store interval ID to clear later
+            window.progressInterval = interval;
+        }
     } else {
         indicator.classList.add('hidden');
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-magic mr-2"></i><span>Generovať obsah</span>';
         btn.classList.remove('opacity-75');
+        
+        // Clear interval and reset progress
+        if (window.progressInterval) {
+            clearInterval(window.progressInterval);
+        }
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
     }
 }
 
