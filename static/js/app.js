@@ -197,15 +197,18 @@ function showDownloadButton(show) {
     const downloadBtn = document.getElementById('downloadBtn');
     const clearBtn = document.getElementById('clearBtn');
     const exportBtn = document.getElementById('exportBtn');
+    const copyAllBtn = document.getElementById('copyAllBtn');
     
     if (show) {
         downloadBtn.classList.remove('hidden');
         clearBtn.classList.remove('hidden');
         exportBtn.classList.remove('hidden');
+        copyAllBtn.classList.remove('hidden');
     } else {
         downloadBtn.classList.add('hidden');
         clearBtn.classList.add('hidden');
         exportBtn.classList.add('hidden');
+        copyAllBtn.classList.add('hidden');
     }
 }
 
@@ -636,6 +639,48 @@ function calculateReadingTime(text) {
     const words = text.trim().split(/\s+/).length;
     const minutes = Math.ceil(words / 200); // Average reading speed
     return minutes;
+}
+
+// Copy all results to clipboard
+function copyAllResults() {
+    if (!currentResults) return;
+    
+    const platformNames = {
+        'twitter': 'Twitter/X Thread',
+        'linkedin': 'LinkedIn Post',
+        'instagram': 'Instagram Caption',
+        'facebook': 'Facebook Post',
+        'youtube': 'YouTube Description',
+        'newsletter': 'Newsletter Excerpt',
+        'tiktok': 'TikTok Script',
+        'pinterest': 'Pinterest Pin',
+        'threads': 'Threads Post',
+        'reddit': 'Reddit Post'
+    };
+    
+    let text = '🚀 ContentMultiplier - Vygenerovaný obsah\n';
+    text += '='.repeat(50) + '\n\n';
+    
+    Object.entries(currentResults).forEach(([platform, data]) => {
+        text += `📱 ${platformNames[platform] || platform}\n`;
+        text += '-'.repeat(40) + '\n';
+        
+        if (data.tweets) {
+            text += data.tweets.join('\n\n') + '\n';
+        } else if (data.posts) {
+            text += data.posts.join('\n\n') + '\n';
+        } else if (data.content) {
+            text += data.content + '\n';
+        }
+        
+        text += '\n' + '='.repeat(40) + '\n\n';
+    });
+    
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('Všetky výsledky skopírované!', 'success');
+    }).catch(err => {
+        showToast('Nepodarilo sa skopírovať', 'error');
+    });
 }
 
 // Check Twitter character limit
